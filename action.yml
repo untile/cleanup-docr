@@ -1,0 +1,25 @@
+name: DOCR cleanup
+description: Remove images from DOCR
+branding:
+  icon: 'trash'
+  color: 'blue'
+
+inputs:
+  image_repository:
+    description: Image repository name in the DOCR
+    required: true
+  buffer_size:
+    description: Number of last uploaded images to keep
+    required: false
+    default: 3
+  exclude:
+    description: Tag regex to exclude. Example - \[.*(latest|v1|tag2).*\]
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Remove images
+      shell: bash
+      run: ${{ github.action_path }}/cleanup-docr.sh ${{ inputs.image_repository }} ${{ inputs.buffer_size }} '${{ inputs.exclude }}'
